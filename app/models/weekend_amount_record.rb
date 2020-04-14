@@ -1,0 +1,2 @@
+class WeekendAmountRecord < ApplicationRecord
+end

@@ -67,6 +67,7 @@ GEM
     ffi (1.12.2)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    hirb (0.7.3)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     jwt (2.2.1)
@@ -157,6 +158,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
+  hirb
   jwt
   listen (>= 3.0.5, < 3.2)
   mysql2 (>= 0.4.4)
