@@ -31,6 +31,16 @@ class Api::V1::PurchaseStoresController < ApplicationController
   def update
   end
 
-  def delete
+  def destroy
+    purchase_store = PurchaseStore.find_by_id(params[:id])
+    if purchase_store.purchases.exists?
+      render json: { request_status: 200, request_message: "You cannot delete this store" }
+    else
+      if purchase_store.destroy
+          render json: { request_status: 200, request_message: "Purchase Store deleted successfully" }
+      else
+          render json: { request_status: 500, request_message: "Purchase store record deletion failed" }
+      end
+    end
   end
 end

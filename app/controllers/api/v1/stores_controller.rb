@@ -1,5 +1,6 @@
 class Api::V1::StoresController < ApplicationController
 	before_action :authenticate_request
+	
 	def index
 		stores = JSON.parse(Store.all.select("id, name, owner_name, place, phone, email, pincode").to_json).each{|f| f['key'] = f["id"]}
 	  	if stores.present?
@@ -36,9 +37,16 @@ class Api::V1::StoresController < ApplicationController
 		end
 	end
 
-	def update
-	end
-
-	def delete
+	def destroy
+		store = Store.find_by_id(params[:id])
+	    if store.sales.exists?
+	      render json: { request_status: 200, request_message: "You cannot delete this store" }
+	    else
+	      if store.destroy
+	          render json: { request_status: 200, request_message: "Store deleted successfully" }
+	      else
+	          render json: { request_status: 500, request_message: "Store record deletion failed" }
+	      end
+	    end
 	end
 end

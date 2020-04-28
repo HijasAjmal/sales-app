@@ -10,11 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_11_135120) do
+ActiveRecord::Schema.define(version: 2020_04_19_152545) do
 
   create_table "balance_amount_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "store_id"
     t.decimal "balance_amount", precision: 10, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "finance_transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "payee_type"
+    t.bigint "payee_id"
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.string "finance_type"
+    t.bigint "finance_id"
+    t.decimal "amount", precision: 10, scale: 2
+    t.date "transaction_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["finance_type", "finance_id"], name: "index_finance_transactions_on_finance_type_and_finance_id", length: { finance_type: 191 }
+    t.index ["payee_type", "payee_id"], name: "index_finance_transactions_on_payee_type_and_payee_id", length: { payee_type: 191 }
+    t.index ["receiver_type", "receiver_id"], name: "index_finance_transactions_on_receiver_type_and_receiver_id", length: { receiver_type: 191 }
+  end
+
+  create_table "instant_transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.decimal "amount", precision: 10, scale: 2
+    t.date "transaction_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -41,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_04_11_135120) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "is_deleted", default: false
+    t.decimal "total_amount", precision: 10, scale: 2
   end
 
   create_table "sales", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -54,7 +78,6 @@ ActiveRecord::Schema.define(version: 2020_04_11_135120) do
     t.decimal "expected_amount", precision: 10, scale: 2
     t.decimal "paid_amount", precision: 10, scale: 2
     t.decimal "balance_amount", precision: 10, scale: 2
-    t.decimal "total_amount", precision: 10, scale: 2
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -90,6 +113,7 @@ ActiveRecord::Schema.define(version: 2020_04_11_135120) do
     t.boolean "amount_calculated", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "total_amount", precision: 10, scale: 2
   end
 
 end

@@ -14,10 +14,10 @@ class Api::V1::SalesController < ApplicationController
     end
   
     def create
-        sale = Sale.new(params[:sale].permit(:store_id, :selling_date, :total_box_count, :total_weight, :empty_box_weight, :item_weight,
-            :rate, :expected_amount, :paid_amount, :balance_amount, :total_amount))
-        sale.user_id = @current_user.id
-        if sale.save
+        sale = Sale.create(params[:sale].permit(:store_id, :selling_date, :total_box_count, :total_weight, :empty_box_weight, :item_weight,
+            :rate, :expected_amount, :paid_amount, :balance_amount))
+        sale.update(:user_id => @current_user.id)
+        if sale.present?
           render json: { request_status: 200, request_message: "Sale record created successfully" }
         else
           render json: { request_status: 500, request_message: "Sale record creation failed" }
