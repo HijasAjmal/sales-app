@@ -2,7 +2,7 @@ class Api::V1::UsersController < ApplicationController
 	skip_before_action :authenticate_request, :only => [:login]
 
 	def login
-	   command = AuthenticateUser.call(params[:email], params[:password])
+	   command = AuthenticateUser.call(params[:user][:email], params[:user][:password])
 
 	   if command.success?
 	     render json: { auth_token: command.result, request_status: 200, request_message: "Login successfull" }
