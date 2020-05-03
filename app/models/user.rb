@@ -23,6 +23,15 @@ class User < ApplicationRecord
     return encrypted_passwrod, salt
   end
 
+  # retrieve the password
+  def retrieve_user_password
+    user = User.find(self.id)
+    salt = user.salt
+    password_digest = user.password_digest
+    password = AES.decrypt(password_digest, salt)
+    password
+  end
+
 	# storing current user session
 	def self.current
   	Thread.current[:user]

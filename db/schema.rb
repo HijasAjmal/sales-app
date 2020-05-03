@@ -12,13 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2020_04_19_152545) do
 
-  create_table "balance_amount_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "store_id"
-    t.decimal "balance_amount", precision: 10, scale: 2
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "finance_transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "payee_type"
     t.bigint "payee_id"
@@ -49,9 +42,9 @@ ActiveRecord::Schema.define(version: 2020_04_19_152545) do
     t.string "phone"
     t.string "email"
     t.string "pincode"
+    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "is_deleted", default: false
   end
 
   create_table "purchases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -60,11 +53,11 @@ ActiveRecord::Schema.define(version: 2020_04_19_152545) do
     t.decimal "total_weight", precision: 10, scale: 2
     t.decimal "open_rate", precision: 10, scale: 2
     t.decimal "confirmed_rate", precision: 10, scale: 2
+    t.decimal "total_amount", precision: 10, scale: 2
     t.integer "user_id"
+    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "is_deleted", default: false
-    t.decimal "total_amount", precision: 10, scale: 2
   end
 
   create_table "sales", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -79,9 +72,9 @@ ActiveRecord::Schema.define(version: 2020_04_19_152545) do
     t.decimal "paid_amount", precision: 10, scale: 2
     t.decimal "balance_amount", precision: 10, scale: 2
     t.integer "user_id"
+    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "is_deleted", default: false
   end
 
   create_table "stores", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -91,9 +84,9 @@ ActiveRecord::Schema.define(version: 2020_04_19_152545) do
     t.string "phone"
     t.string "email"
     t.string "pincode"
+    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "is_deleted", default: false
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -101,19 +94,20 @@ ActiveRecord::Schema.define(version: 2020_04_19_152545) do
     t.string "middle_name"
     t.string "last_name"
     t.string "email"
+    t.string "phone_number"
     t.string "password_digest"
+    t.string "salt"
+    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "phone_number"
-    t.boolean "is_deleted", default: false
   end
 
   create_table "weekend_amount_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.date "sold_date"
     t.boolean "amount_calculated", default: false
+    t.decimal "total_amount", precision: 10, scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.decimal "total_amount", precision: 10, scale: 2
   end
 
 end

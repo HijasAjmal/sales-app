@@ -45,4 +45,31 @@ class Sale < ApplicationRecord
 			end
 		end
 	end
+
+	# generate sales reports
+	def self.generate_report(start_date, end_date)
+		table_columns = ['Store name', 'Selling date', "Total box count", "Total weight(Kg.)", "Empty box weight(Kg.)", "Item weight(Kg.)", "Rate(Rs.)", "Expected amount(Rs.)", "Paid amount(Rs.)", "Balance amount(Rs.)"]
+		reports_data = []
+		total_box_count = 0
+		total_weight = 0
+		total_expected_amount = 0
+		total_item_weight = 0
+		sales = JSON.parse(Sale.all.joins(:store).
+			where("sales.selling_date BETWEEN ? AND ? ", "#{start_date.to_date}", "#{end_date.to_date}").
+			select("sales.id, stores.name, sales.selling_date, sales.total_box_count, sales.total_weight, sales.empty_box_weight, 
+				sales.item_weight, sales.rate, sales.expected_amount, sales.paid_amount, sales.balance_amount").to_json)
+		if sales.present?
+			sales.each do |record|
+		      reports_data << [record["name"].to_s, record["selling_date"].to_s, record["total_box_count"].to_s, record["total_weight"].to_s, record["empty_box_weight"].to_s,
+		  						record["item_weight"].to_s, record["rate"].to_s, record["expected_amount"].to_s, record["paid_amount"].to_s, record["balance_amount"].to_s]
+		  	  total_box_count += record["total_box_count"].to_i
+		  	  total_weight += record["total_weight"].to_f
+		  	  total_item_weight += record["item_weight"].to_f
+		  	  total_expected_amount += record["expected_amount"].to_f
+		    end
+		end
+	    reports = {:tableData => reports_data, :tableHead => table_columns, 
+	    	:tableSummary => {:total_box_count => total_box_count, :total_weight => total_weight, :total_item_weight => total_item_weight, :total_expected_amount => total_expected_amount}
+	    }
+	end
 end

@@ -2,7 +2,7 @@ class Api::V1::StoresController < ApplicationController
 	before_action :authenticate_request
 	
 	def index
-		stores = JSON.parse(Store.all.select("id, name, owner_name, place, phone, email, pincode").to_json).each{|f| f['key'] = f["id"]}
+		stores = JSON.parse(Store.all.select("id, name, owner_name, place, phone, email, pincode").to_json)
 	  	if stores.present?
 		   render json: { stores: stores, request_status: 200, request_message: "" }
 	  	else
@@ -47,6 +47,16 @@ class Api::V1::StoresController < ApplicationController
 	      else
 	          render json: { request_status: 500, request_message: "Store record deletion failed" }
 	      end
+	    end
+	end
+
+	def update
+		store = Store.find_by_id(params[:id])
+	    store.update(params[:store].except(:id).permit(:name, :owner_name, :place, :phone, :email, :pincode))
+	    unless purchase_store.errors.present?
+	      render json: {request_status: 200, request_message: "Store updated successfully" }
+	    else
+	      render json: {request_status: 500, request_message: "Store updation failed" }
 	    end
 	end
 end

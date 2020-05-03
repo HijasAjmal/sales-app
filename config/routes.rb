@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 	          get :list_users, :action => :list_users
 	          post :show_user_profile, :action => :show_user_profile
 	          post :edit_user, :action => :edit_user
+	          post :update_user_profile, :action => :update_user_profile
 	        end
 	    end
 
@@ -35,12 +36,6 @@ Rails.application.routes.draw do
 	         	post :list_sales, :action => :list_sales
 	        end
 	    end
-	    resources :weekend_amount_records do
-	        collection do
-	         	get :list_records, :action => :list_records
-	         	post :update_weekend_records, :action => :update_weekend_records
-	        end
-	    end
 	    resources :finance_transactions do
 	        collection do
 	        	post :list_transactions, :action => :list_transactions
@@ -48,6 +43,12 @@ Rails.application.routes.draw do
 	    end
 	    resources :dashboards do
 	        
+	    end
+
+	    resources :reports do
+	    	collection do
+	        	post :generate_report, :action => :generate_report
+	        end
 	    end
 	  end
 	end
