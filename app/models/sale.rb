@@ -7,15 +7,7 @@ class Sale < ApplicationRecord
 	has_many :finance_transactions, as: :finance, dependent: :destroy
 
 	# callbacks
-	after_save :find_or_create_weekend_amount_record
 	after_create :create_finance_transaction
-
-
-	# create or update find or create weekend amount record for each day
-	def find_or_create_weekend_amount_record
-		sale = self
-		weekend_record = WeekendAmountRecord.find_or_create_by(:sold_date => sale.selling_date)
-	end
 
 	# create finance transaction for sale record
 	def create_finance_transaction
