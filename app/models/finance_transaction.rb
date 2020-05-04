@@ -12,7 +12,7 @@ class FinanceTransaction < ApplicationRecord
 	def self.fetch_finance_transactions_by_date(date)
 		transactions = []
 		FinanceTransaction.all.where("transaction_date = ?", date).each do |f|
-			transactions << {:payee => f.payee_name, :receiver => f.receiver_name, :finance_type => f.finance_type, :amount => f.amount.to_f, :transaction_date => f.transaction_date}
+			transactions << {:id => f.id, :payee => f.payee_name, :receiver => f.receiver_name, :finance_type => f.finance_type, :amount => f.amount.to_f, :transaction_date => f.transaction_date}
 		end
 		transactions
 	end

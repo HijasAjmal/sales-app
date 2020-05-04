@@ -35,4 +35,14 @@ class Api::V1::SalesController < ApplicationController
             render json: { request_status: 500, request_message: "Sale record deletion failed" }
         end
     end
+    
+    def fetch_total_balance_amount
+      store = Store.find_by(id: params[:sale][:id])
+      balance_amount = (store.present? && store.sales.present?) ? store.sales.last.balance_amount : 0
+      if store.present?
+        render json: { balance_amount: balance_amount, request_status: 200, request_message: "" }
+      else
+        ender json: { request_status: 500, request_message: "" }
+      end
+    end
 end

@@ -9,8 +9,8 @@ class CreateSales < ActiveRecord::Migration[6.0]
       t.decimal :item_weight, precision: 10, scale: 2
       t.decimal :rate, precision: 10, scale: 2
       t.decimal :expected_amount, precision: 10, scale: 2
-      t.decimal :paid_amount, precision: 10, scale: 2
-      t.decimal :balance_amount, precision: 10, scale: 2
+      t.decimal :paid_amount, precision: 10, scale: 2, :default => 0
+      t.decimal :balance_amount, precision: 10, scale: 2, :default => 0
       t.integer :user_id
       t.boolean :is_deleted, :default => false
 

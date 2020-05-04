@@ -60,8 +60,21 @@ class Sale < ApplicationRecord
 		  	  total_expected_amount += record["expected_amount"].to_f
 		    end
 		end
+			total_farm_weight, total_weight_loss, total_farm_rate, total_selling_rate = self.generate_final_values_for_report(start_date, end_date, total_item_weight)
 	    reports = {:tableData => reports_data, :tableHead => table_columns, 
-	    	:tableSummary => {:total_box_count => total_box_count, :total_weight => total_weight, :total_item_weight => total_item_weight, :total_expected_amount => total_expected_amount}
+	    	:tableSummary => {:total_box_count => total_box_count, :total_weight => total_weight, :total_item_weight => total_item_weight, 
+					:total_expected_amount => total_expected_amount, :total_farm_weight => total_farm_weight, :total_weight_loss => total_weight_loss,
+					:total_farm_rate => total_farm_rate, :total_selling_rate => total_selling_rate}
 	    }
+	end
+	
+	# fetch final report values
+	def self.generate_final_values_for_report(start_date, end_date, total_item_weight)
+		total_farm_weight = Purchase.all.where("purchase_date BETWEEN ? AND ?", start_date.to_date, end_date.to_date).map(&:total_weight).sum().to_f
+		total_weight_loss = (total_farm_weight.to_f >= total_item_weight.to_f) ? total_farm_weight.to_f - total_item_weight.to_f : 0
+		total_farm_rate = Purchase.all.where("purchase_date BETWEEN ? AND ?", start_date.to_date, end_date.to_date).
+			select("IF(confirmed_rate > 0, total_weight*confirmed_rate, total_weight*open_rate) as purchase_amount").map(&:purchase_amount).sum().to_f
+		total_selling_rate = Sale.all.where("selling_date BETWEEN ? AND ?", start_date.to_date, end_date.to_date).select('expected_amount').map(&:expected_amount).sum().to_f
+		return total_farm_weight, total_weight_loss, total_farm_rate, total_selling_rate
 	end
 end

@@ -58,4 +58,16 @@ class Api::V1::PurchasesController < ApplicationController
       render json: { request_status: 500, request_message: "Purchase record deletion failed" }
     end
   end
+  
+  def fetch_total_due_amount
+    purchase_amount = Purchase.all.where(purchase_store_id: params[:purchase][:id]).select("IF(confirmed_rate > 0, total_weight*confirmed_rate, total_weight*open_rate) as purchase_amount").map(&:purchase_amount).sum().to_f
+    paid_amount = PurchaseStore.find_by(id: params[:purchase][:id]).finance_transactions.map(&:amount).sum().to_f
+    due_amount = 0
+    if purchase_amount > paid_amount
+      due_amount += (purchase_amount.to_f - paid_amount.to_f)
+      render json: { due_amount: due_amount, request_status: 200, request_message: "" }
+    else
+      ender json: { request_status: 500, request_message: "" }
+    end
+  end
 end

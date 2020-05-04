@@ -28,12 +28,14 @@ Rails.application.routes.draw do
 
 	    resources :purchases do
 	        collection do
-	        	post :list_purchases, :action => :list_purchases  
+	        	post :list_purchases, :action => :list_purchases
+            post :fetch_total_due_amount, :action => :fetch_total_due_amount
 	        end
 	    end
 	    resources :sales do
 	        collection do
 	         	post :list_sales, :action => :list_sales
+            post :fetch_total_balance_amount, :action => :fetch_total_balance_amount
 	        end
 	    end
 	    resources :finance_transactions do

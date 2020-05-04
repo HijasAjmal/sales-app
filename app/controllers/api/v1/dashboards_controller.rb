@@ -1,7 +1,7 @@
 class Api::V1::DashboardsController < ApplicationController
 
 	def index
-		total_purchase_amount = Purchase.all.sum(:total_amount).to_f
+		total_purchase_amount = Purchase.all.select("IF(confirmed_rate > 0, total_weight*confirmed_rate, total_weight*open_rate) as purchase_amount").map(&:purchase_amount).sum().to_f
 		total_sell_amount = Sale.all.sum(:expected_amount).to_f
 		total_profit_amount = ((total_sell_amount.to_f - total_purchase_amount.to_f) > 0) ? (total_sell_amount.to_f - total_purchase_amount.to_f) : 0.00
 		total_due_amount = total_purchase_amount - FinanceTransaction.all.where(:receiver_type => 'PurchaseStore').sum(:amount).to_f

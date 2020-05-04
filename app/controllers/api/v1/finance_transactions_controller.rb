@@ -30,5 +30,16 @@ class Api::V1::FinanceTransactionsController < ApplicationController
   end
 
   def destroy
+    finance_transaction = FinanceTransaction.find_by(id: params[:id])
+    if finance_transaction.payee_type == 'Store'
+      if finance_transaction.payee.sales.present?
+        finance_transaction.payee.sales.last.update(:balance_amount => (finance_transaction.payee.sales.last.balance_amount.to_f + finance_transaction.amount.to_f))
+      end
+    end
+    if finance_transaction.destroy
+      render json: { request_status: 200, request_message: "Transaction deleted successfully" }
+    else
+      render json: { request_status: 500, request_message: "Transaction deletion faild" }
+    end
   end
 end
