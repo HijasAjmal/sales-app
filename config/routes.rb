@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 	    resources :reports do
 	    	collection do
 	        	post :generate_report, :action => :generate_report
+	        	post :generate_user_report, :action => :generate_user_report
 	        end
 	    end
 	  end
