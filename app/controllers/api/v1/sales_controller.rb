@@ -14,9 +14,11 @@ class Api::V1::SalesController < ApplicationController
     end
   
     def create
+        store = Store.find_by(id: params[:sale][:store_id])
+        balance_amount = store.sales.last.balance_amount if store.sales.present?
         sale = Sale.create(params[:sale].permit(:store_id, :selling_date, :total_box_count, :total_weight, :empty_box_weight, :item_weight,
             :rate, :expected_amount, :paid_amount, :balance_amount))
-        sale.update(:user_id => @current_user.id)
+        sale.update(:user_id => @current_user.id, :balance_amount => (sale.balance_amount.to_f + balance_amount.to_f))
         if sale.present?
           render json: { request_status: 200, request_message: "Sale record created successfully" }
         else
