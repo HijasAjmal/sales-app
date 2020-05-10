@@ -14,7 +14,7 @@ class PurchaseStore < ApplicationRecord
 			reports_data << [transaction.transaction_date, transaction.payee_name, transaction.amount]
 			total_paid_amount += transaction.amount.to_f
 		end
-		reports_data << ['Total', '', total_paid_amount] if transactions.present?
+		reports_data << ['Total', '', total_paid_amount.round(2)] if transactions.present?
 		headerDetails = store.headerDetails(start_date, end_date)
 		reports = {:tableData => reports_data, :tableHead => table_columns, :headerDetails => headerDetails}
 		reports
@@ -29,8 +29,8 @@ class PurchaseStore < ApplicationRecord
 		number_of_transactions = self.finance_transactions.where("finance_transactions.transaction_date BETWEEN ? AND ?", start_date.to_date, end_date.to_date).count
 		report_date = Date.today.to_date.strftime('%d/%m/%Y')
 		user_phone_number = User.current.phone_number
-		headerDetails = {:customer_name => self.name, :final_balance_amount => final_balance_amount, :total_credit_amount => total_credit_amount,
-						:total_debit_amount => total_debit_amount, :number_of_transactions => number_of_transactions, :report_genrated_at => report_date, 
+		headerDetails = {:customer_name => self.name, :final_balance_amount => final_balance_amount.round(2), :total_credit_amount => total_credit_amount.round(2),
+						:total_debit_amount => total_debit_amount.round(2), :number_of_transactions => number_of_transactions, :report_genrated_at => report_date, 
 						:report_date => "#{start_date.to_date.strftime('%d/%m/%Y')} - #{end_date.to_date.strftime('%d/%m/%Y')}", :user_phone_number => user_phone_number}
 	end
 end

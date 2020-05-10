@@ -69,9 +69,9 @@ class Sale < ApplicationRecord
 			total_farm_weight, total_weight_loss, total_farm_rate, total_selling_rate = self.generate_final_values_for_report(start_date, end_date, total_item_weight)
 			reports_data << ['Total', '', total_box_count, total_weight.round(2), total_empty_box_weight.round(2), total_item_weight.round(2), '', total_expected_amount.round(2), total_paid_amount.round(2), total_balance_amount.round(2)]
 	    reports = {:tableData => reports_data, :tableHead => table_columns, 
-	    	:tableSummary => {:total_box_count => total_box_count, :total_weight => total_weight, :total_item_weight => total_item_weight, 
-					:total_expected_amount => total_expected_amount, :total_farm_weight => total_farm_weight, :total_weight_loss => total_weight_loss,
-					:total_farm_rate => total_farm_rate, :total_selling_rate => total_selling_rate}
+	    	:tableSummary => {:total_box_count => total_box_count, :total_weight => total_weight.round(2), :total_item_weight => total_item_weight.round(2), 
+					:total_expected_amount => total_expected_amount.round(2), :total_farm_weight => total_farm_weight.round(2), :total_weight_loss => total_weight_loss.round(2),
+					:total_farm_rate => total_farm_rate.round(2), :total_selling_rate => total_selling_rate.round(2)}
 	    }
 	end
 	
