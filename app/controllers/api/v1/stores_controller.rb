@@ -53,7 +53,7 @@ class Api::V1::StoresController < ApplicationController
 	def update
 		store = Store.find_by_id(params[:id])
 	    store.update(params[:store].except(:id).permit(:name, :owner_name, :place, :phone, :email, :pincode))
-	    unless purchase_store.errors.present?
+	    unless store.errors.present?
 	      render json: {request_status: 200, request_message: "Store updated successfully" }
 	    else
 	      render json: {request_status: 500, request_message: "Store updation failed" }
